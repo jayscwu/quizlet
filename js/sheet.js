@@ -10,6 +10,16 @@ function shuffle(arr) {
   return a;
 }
 
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function renderBlankQuestion(question) {
+  return escapeHtml(question).replace(/_{3,}/g, '<span class="blank">_____</span>');
+}
+
 async function fetchDeck(sheetId) {
   if (SHEET_CACHE[sheetId]) return SHEET_CACHE[sheetId];
 
@@ -37,7 +47,8 @@ async function fetchDeck(sheetId) {
         no: (row['題號'] || '').trim(),
         question,
         answer,
-        options: shuffle(Array.from(optionSet)),
+        // 故意不在這裡排序，改由測驗畫面每次渲染時即時洗牌
+        options: Array.from(optionSet),
       };
     })
     .filter((item) => item.question && item.answer);

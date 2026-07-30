@@ -9,14 +9,23 @@
 <body>
   <header class="site-header">
     <h1>📚 英文題庫測驗網</h1>
+    <button class="home-link" id="logout-btn" hidden>登出</button>
   </header>
 
   <main>
-    <p class="subtitle">選擇一份題庫，開始單字卡複習或測驗！</p>
+    <p class="subtitle">選擇一份題庫，開始測驗！</p>
+    <input
+      type="search"
+      id="deck-search"
+      class="search-input"
+      placeholder="搜尋單元，例如：Unit 12"
+    />
     <div class="deck-grid" id="deck-grid"></div>
+    <p class="empty-state" id="deck-empty" hidden>找不到符合的題庫，請換個關鍵字試試。</p>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/config.js"></script>
   <script src="js/sheet.js"></script>
   <script src="js/home.js"></script>

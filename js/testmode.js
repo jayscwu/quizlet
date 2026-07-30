@@ -8,6 +8,7 @@ function renderTest(container, items, deck) {
   function renderQuestion() {
     answered = false;
     const item = items[order[pos]];
+    const options = shuffle(item.options);
 
     container.innerHTML = `
       <div class="question-block">
@@ -24,7 +25,7 @@ function renderTest(container, items, deck) {
     `;
 
     const list = container.querySelector('#options-list');
-    item.options.forEach((opt) => {
+    options.forEach((opt) => {
       const btn = document.createElement('button');
       btn.className = 'option-btn';
       btn.textContent = opt;

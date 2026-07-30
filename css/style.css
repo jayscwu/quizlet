@@ -57,13 +57,18 @@ body {
   margin: 0;
 }
 
-.site-header a.home-link {
+.site-header .home-link {
   color: var(--muted);
   text-decoration: none;
   font-size: 0.95rem;
+  background: none;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 0;
 }
 
-.site-header a.home-link:hover {
+.site-header .home-link:hover {
   color: var(--primary);
 }
 
@@ -77,6 +82,28 @@ main {
   color: var(--muted);
   margin-top: -0.5rem;
   margin-bottom: 1.5rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--muted);
+  padding: 2rem 1rem;
 }
 
 .deck-grid {
@@ -161,65 +188,9 @@ main {
   color: var(--danger);
 }
 
-/* Flashcards */
-.flashcard-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.25rem;
-}
-
 .progress {
   color: var(--muted);
   font-size: 0.9rem;
-}
-
-.flashcard {
-  width: 100%;
-  max-width: 560px;
-  height: 300px;
-  perspective: 1200px;
-  cursor: pointer;
-}
-
-.flashcard-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.5s;
-  transform-style: preserve-3d;
-}
-
-.flashcard.flipped .flashcard-inner {
-  transform: rotateY(180deg);
-}
-
-.flashcard-face {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 2rem;
-  font-size: 1.2rem;
-}
-
-.flashcard-face.back {
-  transform: rotateY(180deg);
-  color: var(--primary);
-  font-weight: 700;
-  font-size: 1.6rem;
-}
-
-.flashcard-hint {
-  color: var(--muted);
-  font-size: 0.85rem;
 }
 
 .controls-row {
@@ -362,4 +333,122 @@ main {
 .wrong-item .a-wrong {
   color: var(--danger);
   text-decoration: line-through;
+}
+
+/* 登入畫面 */
+#auth-gate {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1.5rem;
+}
+
+.auth-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 2rem;
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.auth-card h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.15rem;
+}
+
+.auth-card input {
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 1rem;
+  text-align: center;
+}
+
+.auth-card input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.auth-error {
+  color: var(--danger);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+/* 響應式設計（手機） */
+@media (max-width: 640px) {
+  .site-header {
+    padding: 1rem;
+  }
+
+  .site-header h1 {
+    font-size: 1.05rem;
+  }
+
+  main {
+    padding: 1rem;
+  }
+
+  .deck-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .deck-actions {
+    flex-direction: column;
+  }
+
+  .deck-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .question-block {
+    padding: 1.1rem;
+  }
+
+  .question-text {
+    font-size: 1.05rem;
+  }
+
+  .question-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .question-footer .score-badge {
+    text-align: center;
+  }
+
+  .question-footer #next-btn {
+    width: 100%;
+  }
+
+  .result-card {
+    padding: 1.75rem 1rem;
+  }
+
+  .result-score {
+    font-size: 2rem;
+  }
+
+  .controls-row {
+    width: 100%;
+  }
+
+  .controls-row .control-btn {
+    width: 100%;
+  }
 }
