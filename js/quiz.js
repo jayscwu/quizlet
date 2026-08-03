@@ -9,7 +9,6 @@ async function initQuizPage() {
   const unitName = params.get('unit');
 
   const titleEl = document.getElementById('deck-title');
-  const backLink = document.getElementById('back-link');
   const app = document.getElementById('app');
 
   if (!subjectName || !courseName || !unitName) {
@@ -18,7 +17,6 @@ async function initQuizPage() {
     return;
   }
 
-  backLink.href = `course.html?subject=${encodeURIComponent(subjectName)}&course=${encodeURIComponent(courseName)}`;
   titleEl.textContent = `${subjectName} > ${courseName} > ${unitName}`;
   document.title = `${unitName}｜測驗`;
 

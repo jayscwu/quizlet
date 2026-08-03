@@ -106,6 +106,39 @@ main {
   padding: 2rem 1rem;
 }
 
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.chip {
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.chip:hover {
+  border-color: var(--primary);
+}
+
+.chip.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+.unit-tag {
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin: 0;
+}
+
 .deck-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));

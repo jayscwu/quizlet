@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>題庫測驗網</title>
-  <link rel="stylesheet" href="css/style.css?v=4" />
+  <link rel="stylesheet" href="css/style.css?v=5" />
 </head>
 <body>
   <header class="site-header">
@@ -13,15 +13,23 @@
   </header>
 
   <main>
-    <p class="subtitle">選擇一個科目，開始練習！</p>
-    <div class="deck-grid" id="subject-grid"></div>
+    <input
+      type="search"
+      id="unit-search"
+      class="search-input"
+      placeholder="🔍 搜尋單元、課程或科目關鍵字，例如：英文 12"
+      autofocus
+    />
+    <div class="chip-row" id="subject-chips"></div>
+    <div class="deck-grid" id="unit-grid"></div>
+    <p class="empty-state" id="unit-empty" hidden>找不到符合的單元，請換個關鍵字或篩選條件試試。</p>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <script src="js/auth.js?v=4"></script>
-  <script src="js/config.js?v=4"></script>
-  <script src="js/sheet.js?v=4"></script>
-  <script src="js/directory.js?v=4"></script>
-  <script src="js/home.js?v=4"></script>
+  <script src="js/auth.js?v=5"></script>
+  <script src="js/config.js?v=5"></script>
+  <script src="js/sheet.js?v=5"></script>
+  <script src="js/directory.js?v=5"></script>
+  <script src="js/home.js?v=5"></script>
 </body>
 </html>
