@@ -69,6 +69,12 @@ body {
   vertical-align: middle;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .site-header .home-link {
   color: var(--muted);
   text-decoration: none;
@@ -508,6 +514,33 @@ main {
   color: var(--danger);
   font-size: 0.85rem;
   margin: 0;
+}
+
+.user-select {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.user-chip {
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.user-chip:hover {
+  border-color: var(--primary);
+}
+
+.user-chip.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
 }
 
 /* 響應式設計（手機） */

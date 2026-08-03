@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   requireAuth(initQuizPage);
 });
 
-async function initQuizPage() {
+async function initQuizPage(user) {
   const params = new URLSearchParams(location.search);
   const subjectName = params.get('subject');
   const courseName = params.get('course');
@@ -34,7 +34,8 @@ async function initQuizPage() {
     }
 
     const items = await fetchDeck(unit.sheetId);
-    renderSetup(app, items, unit);
+    const context = { user, subjectName, courseName, unitName };
+    renderSetup(app, items, context);
   } catch (err) {
     app.innerHTML = `<p class="error">載入題庫失敗：${err.message}</p>`;
   }
@@ -49,7 +50,7 @@ function buildCountOptions(total) {
   return options;
 }
 
-function renderSetup(container, items, unit) {
+function renderSetup(container, items, context) {
   const total = items.length;
   const countOptions = buildCountOptions(total);
 
@@ -93,9 +94,9 @@ function renderSetup(container, items, unit) {
     const selected = shuffle(items).slice(0, count);
 
     if (type === 'spelling') {
-      renderSpelling(container, selected, unit);
+      renderSpelling(container, selected, context);
     } else {
-      renderTest(container, selected, unit);
+      renderTest(container, selected, context);
     }
   });
 }

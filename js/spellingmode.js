@@ -2,7 +2,7 @@ function normalizeSpelling(str) {
   return str.trim().toLowerCase();
 }
 
-function renderSpelling(container, items, deck) {
+function renderSpelling(container, items, context) {
   const order = shuffle(items.map((_, i) => i));
   let pos = 0;
   let score = 0;
@@ -85,6 +85,17 @@ function renderSpelling(container, items, deck) {
 
   function renderResult() {
     const percent = Math.round((score / items.length) * 100);
+
+    logQuizResult({
+      studentName: context.user.name,
+      subjectName: context.subjectName,
+      courseName: context.courseName,
+      unitName: context.unitName,
+      quizType: 'spelling',
+      total: items.length,
+      correct: score,
+    });
+
     container.innerHTML = `
       <div class="result-card">
         <div>拼字測驗完成！</div>
@@ -113,7 +124,7 @@ function renderSpelling(container, items, deck) {
     `;
 
     container.querySelector('#retry-btn').addEventListener('click', () => {
-      renderSpelling(container, items, deck);
+      renderSpelling(container, items, context);
     });
   }
 

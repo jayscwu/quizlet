@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
   requireAuth(initHomePage);
 });
 
-async function initHomePage(role) {
-  const isAdmin = role === 'admin';
+async function initHomePage(user) {
+  const isAdmin = user.role === 'admin';
 
   const logoutBtn = document.getElementById('logout-btn');
   if (logoutBtn) {
@@ -12,9 +12,15 @@ async function initHomePage(role) {
   }
 
   const roleBadge = document.getElementById('role-badge');
-  if (roleBadge && isAdmin) {
-    roleBadge.textContent = '🔧 老師模式';
+  if (roleBadge) {
+    roleBadge.textContent = isAdmin ? `🔧 ${user.name}（老師）` : `👤 ${user.name}`;
     roleBadge.hidden = false;
+  }
+
+  const logLink = document.getElementById('quiz-log-link');
+  if (logLink && isAdmin) {
+    logLink.href = `https://docs.google.com/spreadsheets/d/${QUIZ_LOG_SHEET_ID}/edit`;
+    logLink.hidden = false;
   }
 
   const searchInput = document.getElementById('unit-search');

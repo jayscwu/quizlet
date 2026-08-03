@@ -1,4 +1,4 @@
-function renderTest(container, items, deck) {
+function renderTest(container, items, context) {
   const order = shuffle(items.map((_, i) => i));
   let pos = 0;
   let score = 0;
@@ -67,6 +67,17 @@ function renderTest(container, items, deck) {
 
   function renderResult() {
     const percent = Math.round((score / items.length) * 100);
+
+    logQuizResult({
+      studentName: context.user.name,
+      subjectName: context.subjectName,
+      courseName: context.courseName,
+      unitName: context.unitName,
+      quizType: 'choice',
+      total: items.length,
+      correct: score,
+    });
+
     container.innerHTML = `
       <div class="result-card">
         <div>測驗完成！</div>
@@ -95,7 +106,7 @@ function renderTest(container, items, deck) {
     `;
 
     container.querySelector('#retry-btn').addEventListener('click', () => {
-      renderTest(container, items, deck);
+      renderTest(container, items, context);
     });
   }
 
