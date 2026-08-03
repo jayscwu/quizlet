@@ -2,11 +2,19 @@ document.addEventListener('DOMContentLoaded', () => {
   requireAuth(initHomePage);
 });
 
-async function initHomePage() {
+async function initHomePage(role) {
+  const isAdmin = role === 'admin';
+
   const logoutBtn = document.getElementById('logout-btn');
   if (logoutBtn) {
     logoutBtn.hidden = false;
     logoutBtn.addEventListener('click', logout);
+  }
+
+  const roleBadge = document.getElementById('role-badge');
+  if (roleBadge && isAdmin) {
+    roleBadge.textContent = '🔧 老師模式';
+    roleBadge.hidden = false;
   }
 
   const searchInput = document.getElementById('unit-search');
@@ -75,6 +83,11 @@ async function initHomePage() {
       <h2>${escapeHtml(unit.unitName)}</h2>
       <div class="deck-actions">
         <a class="btn btn-primary" href="quiz.html?subject=${encodeURIComponent(unit.subjectName)}&course=${encodeURIComponent(unit.courseName)}&unit=${encodeURIComponent(unit.unitName)}">📝 開始測驗</a>
+        ${
+          isAdmin
+            ? `<a class="btn btn-secondary" href="https://docs.google.com/spreadsheets/d/${encodeURIComponent(unit.sheetId)}/edit" target="_blank" rel="noopener">✏️ 編輯題庫</a>`
+            : ''
+        }
       </div>
     `;
     grid.appendChild(card);

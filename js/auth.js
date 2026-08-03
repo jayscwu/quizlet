@@ -1,8 +1,11 @@
-// 簡易登入保護：僅用於避免陌生人隨意瀏覽，不是真正的安全機制。
-// 因為這是純前端的公開網站，密碼雜湊值本身也會被放在公開原始碼中，
-// 任何懂技術的人都可能繞過或暴力破解。如需真正的存取控管，需改用後端驗證。
+// 簡易登入保護：僅用於區分「學生」「老師」看到的介面，不是真正的安全機制。
+// 因為這是純前端的公開網站，兩組密碼的雜湊值都會被放在公開原始碼中，
+// 任何懂技術的人都可能繞過或暴力破解。
+// 老師模式能看到的「編輯題庫」連結，實際能不能編輯還是由 Google 試算表
+// 自己的共用權限決定；這裡的登入只是切換介面，不是真正的存取控管。
 const AUTH_STORAGE_KEY = 'quizlet_authed_v1';
-const AUTH_PASSWORD_HASH = '53d6668b995a4117d05d7799f6563672f4659d05f9f9fd45f961164de256b5d0';
+const STUDENT_PASSWORD_HASH = '53d6668b995a4117d05d7799f6563672f4659d05f9f9fd45f961164de256b5d0'; // 0709
+const ADMIN_PASSWORD_HASH = 'b5ac8ff9fde613ff3122ffcab1cb500a6a18aa1464ca10d69a0b2e7c690a79d2'; // 0131
 
 async function sha256Hex(text) {
   const data = new TextEncoder().encode(text);
@@ -12,8 +15,13 @@ async function sha256Hex(text) {
     .join('');
 }
 
+function getRole() {
+  const role = localStorage.getItem(AUTH_STORAGE_KEY);
+  return role === 'admin' ? 'admin' : role === 'student' ? 'student' : null;
+}
+
 function isAuthed() {
-  return localStorage.getItem(AUTH_STORAGE_KEY) === '1';
+  return getRole() !== null;
 }
 
 function logout() {
@@ -22,8 +30,9 @@ function logout() {
 }
 
 function requireAuth(onSuccess) {
-  if (isAuthed()) {
-    onSuccess();
+  const role = getRole();
+  if (role) {
+    onSuccess(role);
     return;
   }
   showLoginGate(onSuccess);
@@ -49,10 +58,14 @@ function showLoginGate(onSuccess) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const hash = await sha256Hex(input.value);
-    if (hash === AUTH_PASSWORD_HASH) {
-      localStorage.setItem(AUTH_STORAGE_KEY, '1');
+    let role = null;
+    if (hash === STUDENT_PASSWORD_HASH) role = 'student';
+    else if (hash === ADMIN_PASSWORD_HASH) role = 'admin';
+
+    if (role) {
+      localStorage.setItem(AUTH_STORAGE_KEY, role);
       overlay.remove();
-      onSuccess();
+      onSuccess(role);
     } else {
       errorEl.hidden = false;
       input.value = '';
