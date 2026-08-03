@@ -3,31 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>英文題庫測驗網</title>
-  <link rel="stylesheet" href="css/style.css?v=3" />
+  <title>題庫測驗網</title>
+  <link rel="stylesheet" href="css/style.css?v=4" />
 </head>
 <body>
   <header class="site-header">
-    <h1>📚 英文題庫測驗網</h1>
+    <h1>📚 題庫測驗網</h1>
     <button class="home-link" id="logout-btn" hidden>登出</button>
   </header>
 
   <main>
-    <p class="subtitle">選擇一份題庫，開始測驗！</p>
-    <input
-      type="search"
-      id="deck-search"
-      class="search-input"
-      placeholder="搜尋單元，例如：Unit 12"
-    />
-    <div class="deck-grid" id="deck-grid"></div>
-    <p class="empty-state" id="deck-empty" hidden>找不到符合的題庫，請換個關鍵字試試。</p>
+    <p class="subtitle">選擇一個科目，開始練習！</p>
+    <div class="deck-grid" id="subject-grid"></div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <script src="js/auth.js?v=3"></script>
-  <script src="js/config.js?v=3"></script>
-  <script src="js/sheet.js?v=3"></script>
-  <script src="js/home.js?v=3"></script>
+  <script src="js/auth.js?v=4"></script>
+  <script src="js/config.js?v=4"></script>
+  <script src="js/sheet.js?v=4"></script>
+  <script src="js/directory.js?v=4"></script>
+  <script src="js/home.js?v=4"></script>
 </body>
 </html>

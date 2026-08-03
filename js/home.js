@@ -2,50 +2,39 @@ document.addEventListener('DOMContentLoaded', () => {
   requireAuth(initHomePage);
 });
 
-function initHomePage() {
-  const grid = document.getElementById('deck-grid');
-  const searchInput = document.getElementById('deck-search');
-  const emptyState = document.getElementById('deck-empty');
+async function initHomePage() {
   const logoutBtn = document.getElementById('logout-btn');
-
   if (logoutBtn) {
     logoutBtn.hidden = false;
     logoutBtn.addEventListener('click', logout);
   }
 
-  DECKS.forEach((deck) => {
-    const card = document.createElement('div');
-    card.className = 'deck-card';
-    card.dataset.searchText = deck.name.toLowerCase();
-    card.innerHTML = `
-      <h2>${deck.name}</h2>
-      <p class="deck-count" data-deck="${deck.id}">題目數量載入中...</p>
-      <div class="deck-actions">
-        <a class="btn btn-primary" href="quiz.html?deck=${deck.id}">📝 開始測驗</a>
-      </div>
-    `;
-    grid.appendChild(card);
+  const grid = document.getElementById('subject-grid');
+  grid.innerHTML = '<p class="loading">科目載入中，請稍候...</p>';
 
-    fetchDeck(deck.sheetId)
-      .then((items) => {
-        card.querySelector('.deck-count').textContent = `共 ${items.length} 題`;
-      })
-      .catch((err) => {
-        card.querySelector('.deck-count').textContent = '載入失敗，請稍後再試';
-        console.error(`載入題庫 ${deck.name} 失敗：`, err);
-      });
-  });
+  try {
+    const subjects = await fetchDirectory();
 
-  function applyFilter() {
-    const keyword = searchInput.value.trim().toLowerCase();
-    let visibleCount = 0;
-    grid.querySelectorAll('.deck-card').forEach((card) => {
-      const match = !keyword || card.dataset.searchText.includes(keyword);
-      card.style.display = match ? '' : 'none';
-      if (match) visibleCount += 1;
+    if (subjects.length === 0) {
+      grid.innerHTML = '<p class="empty-state">目錄裡還沒有啟用中的科目。</p>';
+      return;
+    }
+
+    grid.innerHTML = '';
+    subjects.forEach((subject) => {
+      const unitCount = subject.courses.reduce((sum, c) => sum + c.units.length, 0);
+      const card = document.createElement('div');
+      card.className = 'deck-card';
+      card.innerHTML = `
+        <h2>${escapeHtml(subject.name)}</h2>
+        <p class="deck-count">共 ${subject.courses.length} 個課程、${unitCount} 個單元</p>
+        <div class="deck-actions">
+          <a class="btn btn-primary" href="subject.html?subject=${encodeURIComponent(subject.name)}">📖 查看課程</a>
+        </div>
+      `;
+      grid.appendChild(card);
     });
-    emptyState.hidden = visibleCount !== 0;
+  } catch (err) {
+    grid.innerHTML = `<p class="error">載入科目目錄失敗：${err.message}</p>`;
   }
-
-  searchInput.addEventListener('input', applyFilter);
 }

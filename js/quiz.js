@@ -4,26 +4,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function initQuizPage() {
   const params = new URLSearchParams(location.search);
-  const deckId = params.get('deck');
-  const deck = getDeckById(deckId);
+  const subjectName = params.get('subject');
+  const courseName = params.get('course');
+  const unitName = params.get('unit');
 
   const titleEl = document.getElementById('deck-title');
+  const backLink = document.getElementById('back-link');
   const app = document.getElementById('app');
 
-  if (!deck) {
-    titleEl.textContent = '找不到題庫';
-    app.innerHTML = '<p class="error">找不到指定的題庫，請回首頁重新選擇。</p>';
+  if (!subjectName || !courseName || !unitName) {
+    titleEl.textContent = '找不到單元';
+    app.innerHTML = '<p class="error">找不到指定的單元，請回首頁重新選擇。</p>';
     return;
   }
 
-  titleEl.textContent = deck.name;
-  document.title = `${deck.name}｜測驗`;
+  backLink.href = `course.html?subject=${encodeURIComponent(subjectName)}&course=${encodeURIComponent(courseName)}`;
+  titleEl.textContent = `${subjectName} > ${courseName} > ${unitName}`;
+  document.title = `${unitName}｜測驗`;
 
   app.innerHTML = '<p class="loading">題目載入中，請稍候...</p>';
 
   try {
-    const items = await fetchDeck(deck.sheetId);
-    renderSetup(app, items, deck);
+    const subjects = await fetchDirectory();
+    const subject = findSubject(subjects, subjectName);
+    const course = findCourse(subject, courseName);
+    const unit = findUnit(course, unitName);
+
+    if (!unit) {
+      app.innerHTML = '<p class="error">找不到這個單元，請回首頁重新選擇。</p>';
+      return;
+    }
+
+    const items = await fetchDeck(unit.sheetId);
+    renderSetup(app, items, unit);
   } catch (err) {
     app.innerHTML = `<p class="error">載入題庫失敗：${err.message}</p>`;
   }
@@ -38,7 +51,7 @@ function buildCountOptions(total) {
   return options;
 }
 
-function renderSetup(container, items, deck) {
+function renderSetup(container, items, unit) {
   const total = items.length;
   const countOptions = buildCountOptions(total);
 
@@ -82,9 +95,9 @@ function renderSetup(container, items, deck) {
     const selected = shuffle(items).slice(0, count);
 
     if (type === 'spelling') {
-      renderSpelling(container, selected, deck);
+      renderSpelling(container, selected, unit);
     } else {
-      renderTest(container, selected, deck);
+      renderTest(container, selected, unit);
     }
   });
 }
