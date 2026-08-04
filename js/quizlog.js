@@ -1,6 +1,6 @@
 // 把測驗結果送到「測驗紀錄」Google Sheet（透過 Apps Script 部署的網頁應用程式端點）。
 // QUIZ_LOG_ENDPOINT 尚未設定前，這裡會直接跳過，不影響學生看到自己的測驗結果。
-const QUIZ_LOG_ENDPOINT = '';
+const QUIZ_LOG_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxdJwqbI1PmNy3liuG4rxRFzLem3DcYK6eRCeB0_uJ1bxv6688f5lww6AvEM3uTTXAj/exec';
 
 function logQuizResult({ studentName, subjectName, courseName, unitName, quizType, total, correct }) {
   if (!QUIZ_LOG_ENDPOINT) return;
