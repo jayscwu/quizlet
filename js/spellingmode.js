@@ -91,7 +91,7 @@ function renderSpelling(container, items, context) {
       subjectName: context.subjectName,
       courseName: context.courseName,
       unitName: context.unitName,
-      quizType: 'spelling',
+      quizType: context.quizTypeLabel || '拼字測驗',
       total: items.length,
       correct: score,
     });

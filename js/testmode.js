@@ -73,7 +73,7 @@ function renderTest(container, items, context) {
       subjectName: context.subjectName,
       courseName: context.courseName,
       unitName: context.unitName,
-      quizType: 'choice',
+      quizType: context.quizTypeLabel || '選擇題',
       total: items.length,
       correct: score,
     });

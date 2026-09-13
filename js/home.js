@@ -23,6 +23,18 @@ async function initHomePage(user) {
     logLink.hidden = false;
   }
 
+  const vocabLink = document.getElementById('vocab-edit-link');
+  if (vocabLink && isAdmin) {
+    vocabLink.href = `https://docs.google.com/spreadsheets/d/${ENGLISH_VOCAB_SHEET_ID}/edit`;
+    vocabLink.hidden = false;
+  }
+
+  const sentenceLink = document.getElementById('sentence-edit-link');
+  if (sentenceLink && isAdmin) {
+    sentenceLink.href = `https://docs.google.com/spreadsheets/d/${ENGLISH_SENTENCE_SHEET_ID}/edit`;
+    sentenceLink.hidden = false;
+  }
+
   const searchInput = document.getElementById('unit-search');
   const chipRow = document.getElementById('subject-chips');
   const grid = document.getElementById('unit-grid');
@@ -47,6 +59,7 @@ async function initHomePage(user) {
           courseName: course.name,
           unitName: unit.name,
           sheetId: unit.sheetId,
+          isEnglish: !!unit.isEnglish,
         });
       });
     });
@@ -90,7 +103,7 @@ async function initHomePage(user) {
       <div class="deck-actions">
         <a class="btn btn-primary" href="quiz.html?subject=${encodeURIComponent(unit.subjectName)}&course=${encodeURIComponent(unit.courseName)}&unit=${encodeURIComponent(unit.unitName)}">📝 開始測驗</a>
         ${
-          isAdmin
+          isAdmin && !unit.isEnglish
             ? `<a class="btn btn-secondary" href="https://docs.google.com/spreadsheets/d/${encodeURIComponent(unit.sheetId)}/edit" target="_blank" rel="noopener">✏️ 編輯題庫</a>`
             : ''
         }

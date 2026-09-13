@@ -25,7 +25,7 @@ function logQuizResult({ studentName, subjectName, courseName, unitName, quizTyp
     subject: subjectName,
     course: courseName,
     unit: unitName,
-    quizType: quizType === 'spelling' ? '拼字測驗' : '選擇題',
+    quizType, // 呼叫端直接傳入最終要顯示的中文題型標籤（例如「選擇題」「單字拼字題」）
     takenAt: formatTaiwanTime(new Date()),
     total,
     correct,
