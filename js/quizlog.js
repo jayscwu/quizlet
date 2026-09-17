@@ -1,7 +1,7 @@
 // 把測驗結果、答錯的題目送到 Google Sheet（透過 Apps Script 部署的網頁應用程式端點）。
 // 對應的 *_ENDPOINT 尚未設定前，這裡會直接跳過，不影響學生看到自己的測驗結果。
 const QUIZ_LOG_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxdJwqbI1PmNy3liuG4rxRFzLem3DcYK6eRCeB0_uJ1bxv6688f5lww6AvEM3uTTXAj/exec';
-const WRONG_LOG_ENDPOINT = '';
+const WRONG_LOG_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyes7HNyNHCpYrkq_KJbB1Dv4pQ9DsyvOyta2x4L1mboycQlgmKhynupo8FLZ-m-Q1M/exec';
 
 // 不管使用者裝置本身的時區設定為何，都直接算出台灣時間（UTC+8），
 // 避免記錄成 UTC 時間造成老師看紀錄時要自己換算。

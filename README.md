@@ -158,7 +158,7 @@
 
 ## 更新 CSS / JS 後記得升版本號（避免瀏覽器快取舊版）
 
-三個 HTML 檔（`index.html`、`quiz.html`、`wrongbook.html`）裡的 `css/style.css` 及 `js/*.js` 都加了 `?v=11` 這種版本號查詢字串。瀏覽器與 GitHub Pages 的 CDN 會用檔名（含查詢字串）快取檔案，如果修改了 CSS 或 JS 卻沒改版本號，使用者可能會看到舊版內容。
+三個 HTML 檔（`index.html`、`quiz.html`、`wrongbook.html`）裡的 `css/style.css` 及 `js/*.js` 都加了 `?v=12` 這種版本號查詢字串。瀏覽器與 GitHub Pages 的 CDN 會用檔名（含查詢字串）快取檔案，如果修改了 CSS 或 JS 卻沒改版本號，使用者可能會看到舊版內容。
 
 **每次修改 `css/` 或 `js/` 裡的檔案並要推上 GitHub 時，記得把三個 HTML 檔裡所有 `?v=N` 的數字都往上加一。**
 

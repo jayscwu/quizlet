@@ -13,6 +13,13 @@ const WRONG_LOG_COL = {
   ENABLED: 11,
 };
 
+// 「單字選擇題（錯題重測）」這種重測標記，統計次數與分組時要當成
+// 跟原本的「單字選擇題」是同一種題型，不然同一題從錯題本重測答錯，
+// 會被當成新的一組、次數也不會跟原本的合併。
+function normalizeQuizType(quizType) {
+  return quizType.replace(/（[^）]*）\s*$/, '').trim();
+}
+
 async function fetchWrongQuestions(studentName) {
   const url = `https://docs.google.com/spreadsheets/d/${WRONG_LOG_SHEET_ID}/gviz/tq?tqx=out:csv`;
   const res = await fetch(url);
@@ -35,7 +42,7 @@ async function fetchWrongQuestions(studentName) {
     const subject = (row[WRONG_LOG_COL.SUBJECT] || '').trim();
     const course = (row[WRONG_LOG_COL.COURSE] || '').trim();
     const unit = (row[WRONG_LOG_COL.UNIT] || '').trim();
-    const quizType = (row[WRONG_LOG_COL.QUIZ_TYPE] || '').trim();
+    const quizType = normalizeQuizType((row[WRONG_LOG_COL.QUIZ_TYPE] || '').trim());
     const question = (row[WRONG_LOG_COL.QUESTION] || '').trim();
     const answer = (row[WRONG_LOG_COL.ANSWER] || '').trim();
     const optionsRaw = (row[WRONG_LOG_COL.OPTIONS] || '').trim();
