@@ -44,17 +44,9 @@ function mergeSubjectInto(subjects, subject) {
 }
 
 async function buildEnglishSubject() {
-  const unitNames = await fetchEnglishUnitNames();
-  if (unitNames.length === 0) return null;
-  return {
-    name: ENGLISH_SUBJECT_NAME,
-    courses: [
-      {
-        name: ENGLISH_COURSE_NAME,
-        units: unitNames.map((name) => ({ name, isEnglish: true })),
-      },
-    ],
-  };
+  const courses = await fetchEnglishCourses();
+  if (courses.length === 0) return null;
+  return { name: ENGLISH_SUBJECT_NAME, courses };
 }
 
 async function fetchDirectorySheetSubjects() {

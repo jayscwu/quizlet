@@ -17,26 +17,30 @@ async function initHomePage(user) {
     roleBadge.hidden = false;
   }
 
+  const wrongbookLink = document.getElementById('wrongbook-link');
+  if (wrongbookLink) {
+    wrongbookLink.hidden = false;
+  }
+
   const logLink = document.getElementById('quiz-log-link');
   if (logLink && isAdmin) {
     logLink.href = `https://docs.google.com/spreadsheets/d/${QUIZ_LOG_SHEET_ID}/edit`;
     logLink.hidden = false;
   }
 
-  const vocabLink = document.getElementById('vocab-edit-link');
-  if (vocabLink && isAdmin) {
-    vocabLink.href = `https://docs.google.com/spreadsheets/d/${ENGLISH_VOCAB_SHEET_ID}/edit`;
-    vocabLink.hidden = false;
-  }
-
-  const sentenceLink = document.getElementById('sentence-edit-link');
-  if (sentenceLink && isAdmin) {
-    sentenceLink.href = `https://docs.google.com/spreadsheets/d/${ENGLISH_SENTENCE_SHEET_ID}/edit`;
-    sentenceLink.hidden = false;
+  const englishEditLinks = document.getElementById('english-edit-links');
+  if (englishEditLinks && isAdmin) {
+    englishEditLinks.innerHTML = ENGLISH_LEVELS.map(
+      (level) => `
+      <a class="home-link" href="https://docs.google.com/spreadsheets/d/${level.vocabSheetId}/edit" target="_blank" rel="noopener">📖 ${escapeHtml(level.courseName)} 單字</a>
+      <a class="home-link" href="https://docs.google.com/spreadsheets/d/${level.sentenceSheetId}/edit" target="_blank" rel="noopener">📝 ${escapeHtml(level.courseName)} 例句</a>
+    `
+    ).join('');
   }
 
   const searchInput = document.getElementById('unit-search');
-  const chipRow = document.getElementById('subject-chips');
+  const subjectChipRow = document.getElementById('subject-chips');
+  const courseChipRow = document.getElementById('course-chips');
   const grid = document.getElementById('unit-grid');
   const emptyState = document.getElementById('unit-empty');
 
@@ -71,31 +75,73 @@ async function initHomePage(user) {
   }
 
   let activeSubject = '全部';
+  let activeCourse = '全部';
 
-  const subjectChip = (name) => {
+  function makeChip(row, label, isActive, onClick) {
     const chip = document.createElement('button');
     chip.type = 'button';
-    chip.className = 'chip';
-    chip.textContent = name;
-    chip.dataset.subject = name;
-    chip.addEventListener('click', () => {
-      activeSubject = name;
-      chipRow.querySelectorAll('.chip').forEach((c) => c.classList.toggle('active', c.dataset.subject === name));
+    chip.className = 'chip' + (isActive ? ' active' : '');
+    chip.textContent = label;
+    chip.addEventListener('click', onClick);
+    row.appendChild(chip);
+    return chip;
+  }
+
+  function renderSubjectChips() {
+    subjectChipRow.innerHTML = '';
+    makeChip(subjectChipRow, '全部', activeSubject === '全部', () => {
+      activeSubject = '全部';
+      activeCourse = '全部';
+      renderSubjectChips();
+      renderCourseChips();
       applyFilter();
     });
-    return chip;
-  };
+    subjects.forEach((subject) => {
+      makeChip(subjectChipRow, subject.name, activeSubject === subject.name, () => {
+        activeSubject = subject.name;
+        activeCourse = '全部';
+        renderSubjectChips();
+        renderCourseChips();
+        applyFilter();
+      });
+    });
+  }
 
-  const allChip = subjectChip('全部');
-  allChip.classList.add('active');
-  chipRow.appendChild(allChip);
-  subjects.forEach((subject) => chipRow.appendChild(subjectChip(subject.name)));
+  function renderCourseChips() {
+    courseChipRow.innerHTML = '';
+    if (activeSubject === '全部') {
+      courseChipRow.hidden = true;
+      return;
+    }
+    const subject = subjects.find((s) => s.name === activeSubject);
+    if (!subject || subject.courses.length <= 1) {
+      courseChipRow.hidden = true;
+      return;
+    }
+    courseChipRow.hidden = false;
+    makeChip(courseChipRow, '全部課程', activeCourse === '全部', () => {
+      activeCourse = '全部';
+      renderCourseChips();
+      applyFilter();
+    });
+    subject.courses.forEach((course) => {
+      makeChip(courseChipRow, course.name, activeCourse === course.name, () => {
+        activeCourse = course.name;
+        renderCourseChips();
+        applyFilter();
+      });
+    });
+  }
+
+  renderSubjectChips();
+  renderCourseChips();
 
   grid.innerHTML = '';
   units.forEach((unit) => {
     const card = document.createElement('div');
     card.className = 'deck-card';
     card.dataset.subject = unit.subjectName;
+    card.dataset.course = unit.courseName;
     card.dataset.searchText = `${unit.subjectName} ${unit.courseName} ${unit.unitName}`.toLowerCase();
     card.innerHTML = `
       <p class="unit-tag">${escapeHtml(unit.subjectName)} &gt; ${escapeHtml(unit.courseName)}</p>
@@ -118,8 +164,9 @@ async function initHomePage(user) {
 
     grid.querySelectorAll('.deck-card').forEach((card) => {
       const matchesSubject = activeSubject === '全部' || card.dataset.subject === activeSubject;
+      const matchesCourse = activeCourse === '全部' || card.dataset.course === activeCourse;
       const matchesSearch = tokens.every((token) => card.dataset.searchText.includes(token));
-      const visible = matchesSubject && matchesSearch;
+      const visible = matchesSubject && matchesCourse && matchesSearch;
       card.style.display = visible ? '' : 'none';
       if (visible) visibleCount += 1;
     });

@@ -53,7 +53,7 @@ function renderTest(container, items, context) {
       btn.classList.add('correct');
     } else {
       btn.classList.add('wrong');
-      wrongAnswers.push({ question: item.question, answer: item.answer, chosen });
+      wrongAnswers.push({ question: item.question, answer: item.answer, chosen, options: item.options });
     }
 
     container.querySelectorAll('.option-btn').forEach((b) => {
@@ -67,16 +67,31 @@ function renderTest(container, items, context) {
 
   function renderResult() {
     const percent = Math.round((score / items.length) * 100);
+    const takenAt = formatTaiwanTime(new Date());
+    const quizType = context.quizTypeLabel || '選擇題';
 
     logQuizResult({
       studentName: context.user.name,
       subjectName: context.subjectName,
       courseName: context.courseName,
       unitName: context.unitName,
-      quizType: context.quizTypeLabel || '選擇題',
+      quizType,
+      takenAt,
       total: items.length,
       correct: score,
     });
+
+    if (context.trackWrongQuestions) {
+      logWrongQuestions({
+        studentName: context.user.name,
+        subjectName: context.subjectName,
+        courseName: context.courseName,
+        unitName: context.unitName,
+        quizType,
+        takenAt,
+        wrongItems: wrongAnswers,
+      });
+    }
 
     container.innerHTML = `
       <div class="result-card">

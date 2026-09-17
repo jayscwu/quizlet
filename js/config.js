@@ -9,3 +9,11 @@ const QUIZ_LOG_SHEET_ID = '1-YrGjnaokvKE6ojkKtq96-sgOq0Fs98j73S5jisq4x0';
 // 不再透過目錄 Sheet 手動列出（見 js/englishdata.js）。
 const ENGLISH_VOCAB_SHEET_ID = '1jTd8i6JGebtsh6eZHyIxoKUpj4_Un2p4';
 const ENGLISH_SENTENCE_SHEET_ID = '1PoixQ8WrFEtN00yn5OFt5hRHkXxTWZLo';
+
+// 英文 Level 2（Unit 01~40），跟 Level 1 一樣自動偵測單元。
+const ENGLISH_LEVEL2_VOCAB_SHEET_ID = '15lIYuNdemmm8s9HhM0I6NUzwXGd_SZCZ';
+const ENGLISH_LEVEL2_SENTENCE_SHEET_ID = '177PIfpj37mqK0N6b25wrqIs0nQWc8snd';
+
+// 「錯題紀錄」Google Sheet：記錄英文測驗答錯的每一題，供學生之後重新練習
+// （見 js/wronglog.js 讀取邏輯、寫入端點設定）。
+const WRONG_LOG_SHEET_ID = '1wijMGb6JBzyxTy8k2ZkiDXujTjeb60RXSHHUlsdeb7U';

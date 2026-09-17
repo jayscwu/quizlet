@@ -114,9 +114,10 @@ function renderLegacySetup(container, items, context) {
 // 英文自動偵測單元：測驗類別（A. 中選英／B. 例句選擇題），
 // 選 A 時才會多一層「作答方式」（選擇題／拼字題）。
 async function initEnglishSetup(container, unitName, baseContext) {
+  const courseName = baseContext.courseName;
   let vocabItems;
   try {
-    vocabItems = await fetchVocabItems(unitName);
+    vocabItems = await fetchVocabItems(courseName, unitName);
   } catch (err) {
     container.innerHTML = `<p class="error">載入單字清單失敗：${err.message}</p>`;
     return;
@@ -175,7 +176,7 @@ async function initEnglishSetup(container, unitName, baseContext) {
       countGroup.innerHTML = '<p class="loading">例句載入中...</p>';
       startBtn.disabled = true;
       try {
-        sentenceItems = await fetchSentenceItems(unitName);
+        sentenceItems = await fetchSentenceItems(courseName, unitName);
       } catch (err) {
         countGroup.innerHTML = `<p class="error">載入例句失敗：${err.message}</p>`;
         return;
@@ -207,7 +208,7 @@ async function initEnglishSetup(container, unitName, baseContext) {
       quizTypeLabel = '例句選擇題';
     }
 
-    const context = { ...baseContext, quizTypeLabel };
+    const context = { ...baseContext, quizTypeLabel, trackWrongQuestions: true };
 
     if (category === 'vocab' && answerType === 'spelling') {
       renderSpelling(container, selected, context);

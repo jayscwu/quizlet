@@ -76,7 +76,12 @@ function renderSpelling(container, items, context) {
     } else {
       feedback.innerHTML = `❌ 正確答案是：<strong>${escapeHtml(item.answer)}</strong>`;
       feedback.className = 'spelling-feedback wrong';
-      wrongAnswers.push({ question: item.question, answer: item.answer, chosen: rawValue.trim() || '（未作答）' });
+      wrongAnswers.push({
+        question: item.question,
+        answer: item.answer,
+        chosen: rawValue.trim() || '（未作答）',
+        options: item.options,
+      });
     }
 
     container.querySelector('.score-badge').textContent = `目前得分：${score} / ${pos + 1}`;
@@ -85,16 +90,31 @@ function renderSpelling(container, items, context) {
 
   function renderResult() {
     const percent = Math.round((score / items.length) * 100);
+    const takenAt = formatTaiwanTime(new Date());
+    const quizType = context.quizTypeLabel || '拼字測驗';
 
     logQuizResult({
       studentName: context.user.name,
       subjectName: context.subjectName,
       courseName: context.courseName,
       unitName: context.unitName,
-      quizType: context.quizTypeLabel || '拼字測驗',
+      quizType,
+      takenAt,
       total: items.length,
       correct: score,
     });
+
+    if (context.trackWrongQuestions) {
+      logWrongQuestions({
+        studentName: context.user.name,
+        subjectName: context.subjectName,
+        courseName: context.courseName,
+        unitName: context.unitName,
+        quizType,
+        takenAt,
+        wrongItems: wrongAnswers,
+      });
+    }
 
     container.innerHTML = `
       <div class="result-card">
