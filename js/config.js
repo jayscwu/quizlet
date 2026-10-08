@@ -14,6 +14,10 @@ const ENGLISH_SENTENCE_SHEET_ID = '1PoixQ8WrFEtN00yn5OFt5hRHkXxTWZLo';
 const ENGLISH_LEVEL2_VOCAB_SHEET_ID = '15lIYuNdemmm8s9HhM0I6NUzwXGd_SZCZ';
 const ENGLISH_LEVEL2_SENTENCE_SHEET_ID = '177PIfpj37mqK0N6b25wrqIs0nQWc8snd';
 
+// 英文 七上（課本單元），跟 Level 1/2 一樣自動偵測單元。
+const ENGLISH_G7A_VOCAB_SHEET_ID = '1Ygt1tmCiSu5pK0f8oz-WhNYLAvDjgqlTFv_KKjts0V0';
+const ENGLISH_G7A_SENTENCE_SHEET_ID = '1S_0HDf6yS8IFOmmwPTs2tr0OThmXm8uLv8L-dmTPq0M';
+
 // 「錯題紀錄」Google Sheet：記錄英文測驗答錯的每一題，供學生之後重新練習
 // （見 js/wronglog.js 讀取邏輯、寫入端點設定）。
 const WRONG_LOG_SHEET_ID = '1wijMGb6JBzyxTy8k2ZkiDXujTjeb60RXSHHUlsdeb7U';

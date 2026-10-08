@@ -7,6 +7,7 @@ const ENGLISH_SUBJECT_NAME = '英文';
 const ENGLISH_LEVELS = [
   { courseName: 'Level 1', vocabSheetId: ENGLISH_VOCAB_SHEET_ID, sentenceSheetId: ENGLISH_SENTENCE_SHEET_ID },
   { courseName: 'Level 2', vocabSheetId: ENGLISH_LEVEL2_VOCAB_SHEET_ID, sentenceSheetId: ENGLISH_LEVEL2_SENTENCE_SHEET_ID },
+  { courseName: '七上英文', vocabSheetId: ENGLISH_G7A_VOCAB_SHEET_ID, sentenceSheetId: ENGLISH_G7A_SENTENCE_SHEET_ID },
 ];
 
 // 單字清單欄位順序：單元, 項次, 目標單字, 精簡中文釋義, 混淆單字1, 混淆單字2, 混淆單字3

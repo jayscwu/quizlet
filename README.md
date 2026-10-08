@@ -9,7 +9,7 @@
   - 🔍 搜尋框：即時篩選，支援多關鍵字（例如打「英文 12」同時比對科目/課程/單元名稱）
   - 科目篩選標籤（全部 / 英文 / 國文 …）
   - 每張單元卡片標示所屬「科目 > 課程」，點「開始測驗」直接跳到該單元的測驗設定頁
-- **英文（目前 Level 1、Level 2，各 Unit 01～40）測驗前設定**分兩層：
+- **英文（目前 Level 1、Level 2 各 Unit 01～40，以及七上英文課本單元）測驗前設定**分兩層：
   - **測驗類別**：A. 中選英（給中文選英文單字）／B. 例句選擇題（英文例句填空）
   - 選 A 才會再多一層**作答方式**：選擇題／拼字題；B 固定只有選擇題
   - 題數依當下選的類別即時更新（A 每單元 25 個單字；B 依單元約 58～70 句例句），可選 10 題為單位或全部
@@ -81,11 +81,11 @@
 
 ⚠️ **這組網址之後會出現在公開的網站原始碼裡**，理論上任何人都可能對著它送假資料進測驗紀錄 Sheet（沒有辦法完全防堵，因為網站沒有真正的後端驗證）。如果之後發現被濫用，可以到 Apps Script「管理部署作業」停用舊的、重新部署一組新網址。
 
-## 英文（Level 1、Level 2…）資料來源
+## 英文（Level 1、Level 2、七上英文…）資料來源
 
 英文不透過目錄 Sheet 維護，而是每個 Level 各自固定用兩份共用 Google Sheet，網站會**自動掃描其中的「單元」欄位**產生 Unit 01～40（見 [`js/englishdata.js`](js/englishdata.js) 的 `ENGLISH_LEVELS` 清單）：
 
-- Sheet ID 設定在 [`js/config.js`](js/config.js)：`ENGLISH_VOCAB_SHEET_ID`/`ENGLISH_SENTENCE_SHEET_ID`（Level 1）、`ENGLISH_LEVEL2_VOCAB_SHEET_ID`/`ENGLISH_LEVEL2_SENTENCE_SHEET_ID`（Level 2）
+- Sheet ID 設定在 [`js/config.js`](js/config.js)：`ENGLISH_VOCAB_SHEET_ID`/`ENGLISH_SENTENCE_SHEET_ID`（Level 1）、`ENGLISH_LEVEL2_VOCAB_SHEET_ID`/`ENGLISH_LEVEL2_SENTENCE_SHEET_ID`（Level 2）、`ENGLISH_G7A_VOCAB_SHEET_ID`/`ENGLISH_G7A_SENTENCE_SHEET_ID`（七上英文）
 - **單字清單**欄位順序：`單元, 項次, 目標單字, 精簡中文釋義, 混淆單字1, 混淆單字2, 混淆單字3`（給「中選英」A 模式用，混淆單字直接當選項，不用另外亂數挑）
 - **例句清單**欄位順序：`...單元...測驗挖空句, 正確解答, 錯誤選項1, 錯誤選項2, 錯誤選項3`（給「例句選擇題」B 模式用）
 - ⚠️ 這兩份都是**依欄位順序**讀取，不是依標題文字（Level 2 單字清單的第 4 欄標題文字跟 Level 1 不同，但順序一樣，這樣讀不受影響）
@@ -93,9 +93,9 @@
 - ⚠️ 因為是自動偵測，**沒有逐單元的啟用/停用開關**：只要 Sheet 裡有某個單元的資料，該單元就會出現在網站上。想先不開放某些單元，需要把該單元的資料列暫時搬出這兩份 Sheet，而不是靠開關控制。
 - 新增 Unit 41 以後的單元：直接在對應 Level 的這兩份 Sheet 加資料、單元名稱一致即可，網站會自動抓到，不用改程式碼。
 
-### 新增 Level 3 以後
+### 新增其他課程（Level 3、七下英文…）
 
-1. 準備好該 Level 的單字清單、例句清單兩份 Sheet（格式比照 Level 1/2），設定為「知道連結的任何人皆可查看」
+1. 準備好該課程的單字清單、例句清單兩份 Sheet（格式比照 Level 1/2），設定為「知道連結的任何人皆可查看」
 2. 到 [`js/config.js`](js/config.js) 新增兩個常數（例如 `ENGLISH_LEVEL3_VOCAB_SHEET_ID`、`ENGLISH_LEVEL3_SENTENCE_SHEET_ID`）
 3. 到 [`js/englishdata.js`](js/englishdata.js) 的 `ENGLISH_LEVELS` 陣列多加一筆 `{ courseName: 'Level 3', vocabSheetId: ..., sentenceSheetId: ... }`
 
