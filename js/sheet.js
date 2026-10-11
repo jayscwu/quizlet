@@ -60,3 +60,33 @@ async function fetchDeck(sheetId) {
   SHEET_CACHE[sheetId] = items;
   return items;
 }
+
+// 「共用題庫課程」：整個課程只用一份題庫 Sheet（欄位同上），單元由網站自動掃描
+// 「單元」欄位偵測，不透過目錄 Sheet 逐單元列出。這類課程只提供選擇題。
+// 要新增這類課程，在這裡多加一筆即可。
+const SHARED_DECK_COURSES = [
+  { subjectName: '國文', courseName: '七上國文形音義', sheetId: CHINESE_G7A_XYY_SHEET_ID },
+];
+
+// 單元順序依 Sheet 由上到下第一次出現的順序（「第一課、第二課」是國字，無法用數字排序）。
+async function fetchSharedDeckSubjects() {
+  const subjects = [];
+
+  for (const entry of SHARED_DECK_COURSES) {
+    const items = await fetchDeck(entry.sheetId);
+    const unitNames = Array.from(new Set(items.map((item) => item.unit).filter(Boolean)));
+    if (unitNames.length === 0) continue;
+
+    let subject = subjects.find((s) => s.name === entry.subjectName);
+    if (!subject) {
+      subject = { name: entry.subjectName, courses: [] };
+      subjects.push(subject);
+    }
+    subject.courses.push({
+      name: entry.courseName,
+      units: unitNames.map((name) => ({ name, sheetId: entry.sheetId, isSharedDeck: true })),
+    });
+  }
+
+  return subjects;
+}

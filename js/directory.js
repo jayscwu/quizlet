@@ -1,18 +1,21 @@
-// 組出 科目 -> 課程 -> 單元 的結構，來源有兩個，會合併在一起：
+// 組出 科目 -> 課程 -> 單元 的結構，來源有三個，會合併在一起：
 // 1. 英文 Level 1：自動從單字清單 Sheet 掃描「單元」欄位偵測（見 js/englishdata.js）
-// 2. 其他科目：透過「目錄」Google Sheet 手動維護
+// 2. 共用題庫課程（例如七上國文形音義）：自動從題庫 Sheet 掃描「單元」欄位偵測（見 js/sheet.js）
+// 3. 其他科目：透過「目錄」Google Sheet 手動維護
 // 故意用欄位「順序」而不是欄位「名稱」解析目錄 Sheet，這樣就算維護目錄 Sheet 的人
 // 不小心改動或清空標題列文字，網站仍然能正常運作。
 // 目錄 Sheet 欄位順序固定為：科目, 課程, 單元, 單元題庫SheetID, 啟用
 
 async function fetchDirectory() {
-  const [sheetSubjects, englishSubject] = await Promise.all([
+  const [sheetSubjects, sharedDeckSubjects, englishSubject] = await Promise.all([
     fetchDirectorySheetSubjects(),
+    fetchSharedDeckSubjects(),
     buildEnglishSubject(),
   ]);
 
   const subjects = [];
   sheetSubjects.forEach((subject) => mergeSubjectInto(subjects, subject));
+  sharedDeckSubjects.forEach((subject) => mergeSubjectInto(subjects, subject));
   if (englishSubject) mergeSubjectInto(subjects, englishSubject);
 
   return subjects;

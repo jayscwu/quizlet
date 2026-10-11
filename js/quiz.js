@@ -37,6 +37,9 @@ async function initQuizPage(user) {
 
     if (unit.isEnglish) {
       await initEnglishSetup(app, unitName, baseContext);
+    } else if (unit.isSharedDeck) {
+      const items = (await fetchDeck(unit.sheetId)).filter((item) => item.unit === unitName);
+      renderSharedDeckSetup(app, items, baseContext);
     } else {
       const items = await fetchDeck(unit.sheetId);
       renderLegacySetup(app, items, baseContext);
@@ -108,6 +111,27 @@ function renderLegacySetup(container, items, context) {
     } else {
       renderTest(container, selected, context);
     }
+  });
+}
+
+// 共用題庫課程（例如七上國文形音義）的單元：固定為選擇題，只需要選題數，
+// 答錯的題目會存進錯題本。
+function renderSharedDeckSetup(container, items, baseContext) {
+  container.innerHTML = `
+    <div class="setup-card">
+      <h2>測驗設定</h2>
+
+      <div class="setup-group" id="count-group">${renderCountOptionsHtml(items.length)}</div>
+
+      <button class="btn btn-primary" id="start-btn">開始測驗 →</button>
+    </div>
+  `;
+
+  container.querySelector('#start-btn').addEventListener('click', () => {
+    const count = Number(container.querySelector('input[name="quiz-count"]:checked').value);
+    const selected = shuffle(items).slice(0, count);
+    const context = { ...baseContext, quizTypeLabel: '選擇題', trackWrongQuestions: true };
+    renderTest(container, selected, context);
   });
 }
 

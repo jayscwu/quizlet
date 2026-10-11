@@ -18,6 +18,10 @@ const ENGLISH_LEVEL2_SENTENCE_SHEET_ID = '177PIfpj37mqK0N6b25wrqIs0nQWc8snd';
 const ENGLISH_G7A_VOCAB_SHEET_ID = '1Ygt1tmCiSu5pK0f8oz-WhNYLAvDjgqlTFv_KKjts0V0';
 const ENGLISH_G7A_SENTENCE_SHEET_ID = '1S_0HDf6yS8IFOmmwPTs2tr0OThmXm8uLv8L-dmTPq0M';
 
+// 國文 七上形音義：整個課程共用一份題庫 Sheet，單元（第一課、第二課…）由網站
+// 自動掃描「單元」欄位偵測（見 js/sheet.js 的 SHARED_DECK_COURSES）。
+const CHINESE_G7A_XYY_SHEET_ID = '1JQwP2kk1v6vt36x_CtLtyDbUGtb9dZ40pAq4__ULD1I';
+
 // 「錯題紀錄」Google Sheet：記錄英文測驗答錯的每一題，供學生之後重新練習
 // （見 js/wronglog.js 讀取邏輯、寫入端點設定）。
 const WRONG_LOG_SHEET_ID = '1wijMGb6JBzyxTy8k2ZkiDXujTjeb60RXSHHUlsdeb7U';
